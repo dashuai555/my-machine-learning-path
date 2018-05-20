@@ -9,25 +9,25 @@ def createDataSet():
     labels = ['A', 'A', 'B', 'B']
     return group, labels
 
-
+# 分类器0
 def classify0(inX, dataSet, labels, k):
     dataSetSize = dataSet.shape[0]
-    print(dataSetSize)
+ 
     ##将inX有1*m的矩阵拓展成为n*m的矩阵并且逐项与dataSet中数据相减
     diffMat = np.tile(inX, (dataSetSize, 1)) - dataSet
-    print(diffMat)
+   
     ##将diffMat的每项都平方
     sqDiffMat = diffMat ** 2
-    print(sqDiffMat)
+   
     # 逐行将每行各项的各项相加求和得到一个##1*n##的矩阵,再将该矩阵的每个元素都开方
     sqDistances = sqDiffMat.sum(axis=1)
-    print(sqDistances)
+
     distances = sqDistances ** 0.5
-    print(distances)
+
 
     # 将上面得到的距离列向量按从小到大排序,得到的array是第0位的元素在原array的位置，第1位的元素在原array的位置，以此类推
     sortedDistIndicies = distances.argsort()
-    print(sortedDistIndicies)
+
     # 建立一个字典，对应分类在前k近的距离的样本中出现的次数
     classCount = {}
     # 迭代k次
@@ -46,8 +46,9 @@ def classify0(inX, dataSet, labels, k):
     #############k-近邻算法改进约会网站的配对效果
     # 从文本中解析数据
 
+# 从文件中提取数据
 def file2matrix(filename):
-    labels={'largeDoses':2,'smallDoses':1,'didntLike':0}
+    labels={'largeDoses':1,'smallDoses':2,'didntLike':3}
     # 打开文件
     fr=open(filename)
     # readlines() 方法用于读取所有行(直到结束符 EOF)并返回列表，该列表可以由 Python 的 for... in ... 结构进行处理。
@@ -76,7 +77,34 @@ def file2matrix(filename):
         index=index+1
     return returnMat,classLabelVector
 
+# 将数据进行归一化
+def autoNorm(dataSet):
+    # 取dataSet每列中的最小值，min（0）从列取最小值
+    minVals=dataSet.min(0)
+    # 取dataSet中每列的最大值
+    maxVals=dataSet.max(0)
+    # 最大值减最小值得到区间
+    ranges=maxVals-minVals
+    # 构建归一化矩阵normDataSet
+    normDataSet=np.zeros(np.shape(dataSet))
+    # 共有m个training example
+    m=dataSet.shape[0]
+    # #用x-min/range得到所有的
+    normDataSet=dataSet-np.tile(minVals,(m,1))
+    normDataSet=normDataSet/np.tile(ranges,(m,1))
+    return normDataSet,ranges,minVals
 
-
-
+def datingClassTest(h0Ratio):
+    datingDataMat,datingLabels=file2matrix('C:/Users/12076/PycharmProjects/practice/venv/machine_learning/dataset.txt')
+    normMat,ranges,minVals=autoNorm(datingDataMat)
+    m=normMat.shape[0]
+    numTestVecs=int(m*h0Ratio)
+    errCount=0.0
+    for i in range(numTestVecs):
+        classifierResult=classify0(normMat[i,:],normMat[numTestVecs:m,:],datingLabels[numTestVecs:m],3)
+        # print('the classifier came back with: %d, the real answer is %d'%(classifierResult,datingLabels[i]))
+        if(classifierResult!=datingLabels[i]):
+            errCount+=1.0
+    print('the error rate is:%f'%(errCount/float(numTestVecs)))
+    return errCount/float(numTestVecs)
 
