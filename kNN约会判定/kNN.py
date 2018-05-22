@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 import numpy as np
-import operator
+import operator 
 
 
 def createDataSet():
@@ -36,9 +36,10 @@ def classify0(inX, dataSet, labels, k):
         voteIlabel = labels[sortedDistIndicies[i]]
         # 在字典中该标签名的次数加一,之前没有出现过就给个默认值为0
         classCount[voteIlabel] = classCount.get(voteIlabel, 0) + 1
-    #sorted()函数产生一个新的列表,()内为(iterable迭代方式:这里面的列表可以直接写列表,但是dict要写.items(),items()为返回可遍历的键/值;
-    # cmp:有默认值,可以选择由什么key决定排序方式;key:用列表元素的某个属性和函数进行作为关键字，有默认值,这里面的key=operator.itemgetter
-    # (1)是定义了一个函数,意思是key为取第一项;reverse:是否采用反序)
+    #sorted()函数产生一个新的列表,()内为(iterable迭代方式:这里面的列表可以直接写列表,但是dict要写.
+    # items(),items()为返回可遍历的键/值; cmp:有默认值,可以选择由什么key决定排序方式;
+    # key:用列表元素的某个属性和函数进行作为关键字，有默认值,这里面的key=operator.itemgetter(1)是
+    # 定义了一个函数,意思是key为取第一项;reverse:是否采用反序)
     sortedClassCount = sorted(classCount.items(),key=operator.itemgetter(1), reverse=True)
     # 返回sortedClassCount列表的第0个的第0项
     return sortedClassCount[0][0]
@@ -46,7 +47,7 @@ def classify0(inX, dataSet, labels, k):
     #############k-近邻算法改进约会网站的配对效果
     # 从文本中解析数据
 
-# 从文件中提取数据
+# 从文件中提取数据的函数file2matrix
 def file2matrix(filename):
     labels={'largeDoses':1,'smallDoses':2,'didntLike':3}
     # 打开文件
@@ -77,7 +78,7 @@ def file2matrix(filename):
         index=index+1
     return returnMat,classLabelVector
 
-# 将数据进行归一化
+# 将数据进行归一化autoNorm
 def autoNorm(dataSet):
     # 取dataSet每列中的最小值，min（0）从列取最小值
     minVals=dataSet.min(0)
@@ -94,6 +95,7 @@ def autoNorm(dataSet):
     normDataSet=normDataSet/np.tile(ranges,(m,1))
     return normDataSet,ranges,minVals
 
+# 对分类数据进行测试datingClassTest
 def datingClassTest(h0Ratio):
     datingDataMat,datingLabels=file2matrix('C:/Users/12076/PycharmProjects/practice/venv/machine_learning/dataset.txt')
     normMat,ranges,minVals=autoNorm(datingDataMat)
@@ -108,3 +110,13 @@ def datingClassTest(h0Ratio):
     print('the error rate is:%f'%(errCount/float(numTestVecs)))
     return errCount/float(numTestVecs)
 
+# 对输入的数据进行判定，是否喜欢
+def classifyPerson():
+    resultList=['not at all','in small doses','in largedoses']
+    percentTats=float(input('percentage of time spent playing video games?'))
+    ffMiles=float(input('frequent flier miles earned per year?'))
+    iceCream=float(input('liters of ice cream consumed per year?'))
+    datingDataMat,datingLabels=file2matrix('machine_learning/dataset.txt')
+    inArr=np.array([ffMiles,percentTats,iceCream])
+    classifierResult=classify0(inArr,datingDataMat,datingLabels,10)
+    print("You will probably like this person:",resultList[classifierResult-1])

@@ -8,34 +8,34 @@ import matplotlib.pyplot as plt
 # print(c)
 
 
-
-
-dataSet,labels=kNN.file2matrix('venv/machine_learning/dataset.txt')
+dataSet,labels=kNN.file2matrix('machine_learning/dataset.txt')
 dataSet,ranges,minVals=kNN.autoNorm(dataSet)
-
-x=[]
-y=[]
-for i in range(1,11):
-    ratio=0.05*i
-    print(ratio)
-    x.append(ratio)
-    errRatio=kNN.datingClassTest(ratio)
-    y.append(errRatio)
+##################################################################################################################
 
 
-fig=plt.figure(num=1)
-ax=fig.add_subplot(111)
-ax.plot(x,y,label='errRatio with given h0ratio')
-ax.scatter(x,y,10,c='b')
-plt.legend(loc='lower right')
-for i,j in zip(x,y):
-    plt.text(i+0.001,j+0.001,'%.3f' % j,ha='center',va='top')
-new_ticks1=np.arange(0,0.6,0.05)
-new_ticks2=np.arange(0,0.1,0.01)
-plt.xticks(new_ticks1)
-plt.yticks(new_ticks2)
-plt.show()
+# x=[]
+# y=[]
+# for i in range(1,11):
+#     ratio=0.05*i
+#     print(ratio)
+#     x.append(ratio)
+#     errRatio=kNN.datingClassTest(ratio)
+#     y.append(errRatio)
 
+
+# fig=plt.figure(num=1)
+# ax=fig.add_subplot(111)
+# ax.plot(x,y,label='errRatio with given h0ratio')
+# ax.scatter(x,y,10,c='b')
+# plt.legend(loc='lower right')
+# for i,j in zip(x,y):
+#     plt.text(i+0.001,j+0.001,'%.3f' % j,ha='center',va='top')
+# new_ticks1=np.arange(0,0.6,0.05)
+# new_ticks2=np.arange(0,0.1,0.01)
+# plt.xticks(new_ticks1)
+# plt.yticks(new_ticks2)
+# plt.show()
+#############################################################################################################
 
 
 
@@ -83,3 +83,5 @@ plt.show()
 
 
 # plt.show()
+###################################################################################################################
+kNN.classifyPerson()
