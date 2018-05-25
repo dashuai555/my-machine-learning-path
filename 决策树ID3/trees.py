@@ -1,7 +1,16 @@
 
 from math import log
 import operator
-
+########################################################
+# calcShannonEnt(dataSet)：利用所有类标签的发生频率计算出类别出现的概率，利用该概率计算香农熵
+# createDataSet()：建立简单的鱼类鉴别数据集（用不到）
+# splitDataSet(dataSet,axis,value)：按照给定特征划分数据集
+# chooseBestFeatureToSplit(dataSet)：选择最好的数据集划分方式
+# majorityCnt(classList):选择具有最多数目的类,classList是类别集，即每个样本的类别
+# createTree(dataSet,labels):创建树的函数代码,dataSet数据集，labels是数据集中样本的特征的标签集，而不是分类结果的标签集
+# storeTree(inputTree,filename)、grabTree(filename)：储存树和获取树
+# classify(inputTree,featLabels,testVec):使用决策树的分类函数 
+#########################################################
 # 利用所有类标签的发生频率计算出类别出现的概率，利用该概率计算香农熵。 
 def calcShannonEnt(dataSet):
     # numEntriers-dataSet中training examples的总数
