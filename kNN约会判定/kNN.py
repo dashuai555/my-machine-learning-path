@@ -44,7 +44,7 @@ def classify0(inX, dataSet, labels, k):
     # 返回sortedClassCount列表的第0个的第0项
     return sortedClassCount[0][0]
 
-    #############k-近邻算法改进约会网站的配对效果
+#############k-近邻算法改进约会网站的配对效果
     # 从文本中解析数据
 
 # 从文件中提取数据的函数file2matrix
@@ -97,7 +97,7 @@ def autoNorm(dataSet):
 
 # 对分类数据进行测试datingClassTest
 def datingClassTest(h0Ratio):
-    datingDataMat,datingLabels=file2matrix('C:/Users/12076/PycharmProjects/practice/venv/machine_learning/dataset.txt')
+    datingDataMat,datingLabels=file2matrix('machine_learning/kNN约会判定/dataset.txt')
     normMat,ranges,minVals=autoNorm(datingDataMat)
     m=normMat.shape[0]
     numTestVecs=int(m*h0Ratio)
@@ -113,10 +113,14 @@ def datingClassTest(h0Ratio):
 # 对输入的数据进行判定，是否喜欢
 def classifyPerson():
     resultList=['not at all','in small doses','in largedoses']
+    # input('text'),显示text并且要求输入
     percentTats=float(input('percentage of time spent playing video games?'))
     ffMiles=float(input('frequent flier miles earned per year?'))
     iceCream=float(input('liters of ice cream consumed per year?'))
-    datingDataMat,datingLabels=file2matrix('machine_learning/dataset.txt')
+    # 将输入的三个特征带入inX
+    datingDataMat,datingLabels=file2matrix('machine_learning/kNN约会判定/dataset.txt')
     inArr=np.array([ffMiles,percentTats,iceCream])
+    # 将inX，datingDataMat,datingLabels和k输入给classifierResult()得到结果∈{1，2，3}
     classifierResult=classify0(inArr,datingDataMat,datingLabels,10)
+    # 输出结果
     print("You will probably like this person:",resultList[classifierResult-1])

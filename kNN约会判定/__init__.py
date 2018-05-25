@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # print(c)
 
 
-dataSet,labels=kNN.file2matrix('machine_learning/dataset.txt')
+dataSet,labels=kNN.file2matrix('machine_learning/kNN约会判定/dataset.txt')
 dataSet,ranges,minVals=kNN.autoNorm(dataSet)
 ##################################################################################################################
 
