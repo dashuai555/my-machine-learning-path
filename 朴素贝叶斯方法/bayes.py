@@ -22,12 +22,23 @@ def createVocabList(dataSet):
     return list(vocabSet)
 
 # 建立对应每个词的returnVec：[0,1,1,0...]0为未出现在信件中，1为出现了，输入为词汇表和某个文档，输出为文档向量
+# 朴素贝叶斯词集模型
 def setOfWords2Vec(vocabList,inputSet):
     # 建立一个长为vocablist的向量
     returnVec=[0]*len(vocabList)
     for word in inputSet:
         if word in vocabList:
             returnVec[vocabList.index(word)]=1
+        else:
+            print ('the word: %s is not in my Vocabulary!'%word)
+    return returnVec
+
+# 朴素贝叶斯词袋模型
+def bagOfWords2Vec(vocabList,inputSet):
+    returnVec=np.zeros(len(vocabList))
+    for word in inputSet:
+        if word in vocabList:
+            returnVec[vocabList.index(word)]+=1
         else:
             print ('the word: %s is not in my Vocabulary!'%word)
     return returnVec
@@ -79,7 +90,7 @@ def classifyNB(vec2Classify,p0Vec,p1Vec,pClass1):
         return 1
     else:
         return 0
-
+# 便利函数，只是将之前的代码综合起来
 def testingNB():
     listOPosts,listClasses=loadingDataSet()
     myVocabList=createVocabList(listOPosts)
@@ -93,4 +104,51 @@ def testingNB():
     testEntry=['stupid','garbage']
     thisDoc=np.array(setOfWords2Vec(myVocabList,testEntry))
     print(testEntry,'classified as: ',classifyNB(thisDoc,p0V,p1V,pAb))
-    
+
+#  文件解析
+def textParse(bigString):
+    import re
+    # 用除字母和数字之外的字符分隔邮件
+    listOfTokens=re.split(r'\W*',bigString)
+    # 只要长度大于2的分割单元
+    return [tok.lower() for tok in listOfTokens if len(tok)>2 ]
+
+# 垃圾邮件测试函数
+def spamTest():
+    docList=[]
+    classList=[]
+    fullText=[]
+    # 导入并解析文件
+    for i in range(1,26):
+        wordList=textParse(open('朴素贝叶斯方法/email/spam/%d.txt'%i).read())
+        docList.append(wordList)
+        fullText.extend(wordList)
+        classList.append(1)
+        wordList=textParse(open('朴素贝叶斯方法/email/ham/%d.txt'%i).read())
+        docList.append(wordList)
+        fullText.extend(wordList)
+        classList.append(0)
+    vocabList=createVocabList(docList)
+    trainingSet=[]
+    for i in range(50):
+        trainingSet.append(i)
+    print(trainingSet)
+    testSet=[]
+    for i in range(10):
+        randIndex=int(np.random.uniform(0,len(trainingSet)))
+        testSet.append(trainingSet[randIndex])
+        del(trainingSet[randIndex])
+    print(trainingSet)
+    trainMat=[]
+    trainClasses=[]
+    for docIndex in trainingSet:
+        trainMat.append(setOfWords2Vec(vocabList,docList[docIndex]))
+        trainClasses.append(classList[docIndex])
+    p0V,p1V,pSpam=trainNB(np.array(trainMat),np.array(trainClasses))
+    errorCount=0
+    for docIndex in testSet:
+        wordVector=setOfWords2Vec(vocabList,docList[docIndex])
+        if classifyNB(np.array(wordVector),p0V,p1V,pSpam)!=classList[docIndex]:
+            errorCount+=1
+    errorRate=float(errorCount)/len(testSet)
+    return errorRate        
