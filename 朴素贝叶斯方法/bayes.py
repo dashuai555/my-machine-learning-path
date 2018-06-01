@@ -119,6 +119,8 @@ def spamTest():
     classList=[]
     fullText=[]
     # 导入并解析文件
+    # 将每封邮件分片并且加入docList成为列表
+    # 
     for i in range(1,26):
         wordList=textParse(open('朴素贝叶斯方法/email/spam/%d.txt'%i).read())
         docList.append(wordList)
