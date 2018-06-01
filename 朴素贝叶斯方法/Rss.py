@@ -13,9 +13,20 @@ def test(url):
     print(one_page_dict['entries'])
     print(len(one_page_dict['entries']))
 
+# 提取使用频率最高的30个词
 def calcMostFreq(vocabList,fullText):
     freqDict={}
     for token in vocabList:
         freqDict[token]=fullText.count(token)
     sortedFreq=sorted(freqDict.items(),key=itemgetter(1),reverse=True)
     return sortedFreq[:30]
+
+# Rss源分类器
+def localWords(feed1,feed0):
+    docList=[]
+    classList=[]
+    fullText=[]
+    minLen=min(len(feed1['entries']),len(feed0['entries']))
+    for i in range(minLen):
+        wordList=feed1['entries'][i]['summary']
+        
