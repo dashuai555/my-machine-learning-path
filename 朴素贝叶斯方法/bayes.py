@@ -107,8 +107,9 @@ def testingNB():
 
 #  文件解析
 def textParse(bigString):
+    # re(regular expression)用于正则表达式的匹配操作，在文本解析、复杂字符串分析和信息提取时是一个非常有用的工具
     import re
-    # 用除字母和数字之外的字符分隔邮件
+    # 用除字母和数字之外的字符分隔邮件 re中\W匹配任意非字母和数字，即用非字母和数字的东西分割
     listOfTokens=re.split(r'\W*',bigString)
     # 只要长度大于2的分割单元
     return [tok.lower() for tok in listOfTokens if len(tok)>2 ]

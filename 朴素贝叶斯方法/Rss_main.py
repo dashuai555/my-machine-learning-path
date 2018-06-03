@@ -1,11 +1,35 @@
 import Rss
 import feedparser as fp
+import re
+import bayes
+import numpy as np
 
-dict_1={'a':{'v':1,'h':2}}
-print(dict_1['a'])
-ny=fp.parse('http://feed.cnblogs.com/blog/u/161528/rss')
-for e in ny.entries:
+sm=fp.parse('http://www.nba.com/cavaliers/rss.xml')
+rj=fp.parse('https://www.nba.com/lakers/rss.xml')
+
+sm_content=sm.entries
+docList=[]
+fullText=[]
+for e in sm_content:
     print('title:',e.title)
-    print('url:',e.id)
-    # e.content是一个只有一个词典元素的列表，所以用e.content[0]将其变为词典
-    print('content:',e.content[0].value)
+    print('url:',e.link)
+    print('content:',e.summary)
+    doc=bayes.textParse(e.summary)
+    docList.append(doc)
+    fullText.extend(doc)
+
+print (docList,'\n',fullText)
+vocabList=set([])
+for doc in docList:
+    vocabList=vocabList|set(doc)
+vocabList=list(vocabList)
+print ('####################\nvocabList is :',vocabList)
+trainMat=[]
+for doc in docList:
+    vec=np.zeros(len(vocabList))
+    for word in doc:
+        if word in vocabList:
+            vec[vocabList.index(word)]+=1
+        else:print ('the word:%s is not existed'%word)
+    trainMat.append(vec)
+print (trainMat)
