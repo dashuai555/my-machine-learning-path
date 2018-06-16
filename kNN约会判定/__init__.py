@@ -75,7 +75,7 @@ dataSet,ranges,minVals=kNN.autoNorm(dataSet)
 # axes2=plt.subplot(111)
 
 # type1=ax.scatter(type1_x,type1_y,25,c='#357843')
-# type2=ax.scatter(type2_x,type2_y,25,c='#ff9999')
+# type2=ax.scatter(type2_x,type2_y,4325,c='#ff9999')
 # type3=ax.scatter(type3_x,type3_y,25,c='#99ffff')
 # plt.xlabel('percentage of the time spent on playing games')
 # plt.ylabel('Ice cream comsumed per week')
